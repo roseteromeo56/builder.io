@@ -1,0 +1,262 @@
+Romeo Rosete ---
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+jobs:
+  sdks-base:
+    name: Gen 2 SDKs checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          cache-node-modules: true
+          cache-install-state: true
+
+      - name: Run prettier
+        run: yarn workspace @builder.io/root ci:lint
+
+      - name: Run eslint
+        run: yarn workspace @builder.io/sdks ci:lint:sdks
+
+      - name: Typecheck
+        run: yarn nx typecheck @builder.io/sdks
+
+      - name: Run tests
+        run: yarn nx test @builder.io/sdks
+
+  sdks:
+    name: Gen 2 SDKs
+    runs-on: ubuntu-latest
+
+    strategy:
+      # we still want to run all the SDK tests even if one fails, to get a full picture of the state of the SDKs.
+      fail-fast: false
+      matrix:
+        e2e-server:
+          [
+            'svelte',
+            'sveltekit',
+            'react-native',
+            'solid',
+            'solid-start',
+            'qwik-city',
+            'react',
+            'remix',
+            'hydrogen',
+            'next-pages-dir',
+            'next-app-dir-client',
+            'next-app-dir',
+            'vue',
+            'nuxt',
+            'angular',
+            'angular-ssr',
+          ]
+
+    steps:
+      - name: Setup
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          cache-node-modules: true
+          cache-install-state: true
+
+      - name: Run E2E tests
+        run: yarn nx test @e2e/${{ matrix.e2e-server }}
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v3
+        # Only upload the report if the tests failed
+        if: ${{ failure() }}
+        with:
+          name: ${{ matrix.e2e-server }}-playwright-report
+          path: packages/sdks-tests/playwright-report/
+          retention-days: 30
+
+  sdks-snippets:
+    name: Gen 2 SDK Snippets
+    runs-on: ubuntu-latest
+
+    strategy:
+      # we still want to run all the SDK tests even if one fails, to get a full picture of the state of the SDKs.
+      fail-fast: false
+      matrix:
+        snippet:
+          [
+            'vue',
+            'nuxt',
+            'react',
+            'angular',
+            'angular-ssr',
+            'qwik-city',
+            'next-app-dir',
+            'next-app-dir-client',
+            'next-pages-dir',
+            'svelte',
+            'sveltekit',
+            'solid',
+            'react-native',
+          ]
+
+    steps:
+      - name: Setup
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          cache-node-modules: true
+          cache-install-state: true
+
+      - name: Run snippets tests
+        run: yarn nx test @snippet/${{ matrix.snippet }}
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v3
+        # Only upload the report if the tests failed
+        if: ${{ failure() }}
+        with:
+          name: ${{ matrix.snippet }}-snippet-playwright-report
+          path: packages/sdks-tests/playwright-report/
+          retention-days: 30
+
+  gen1-sdk-core:
+    name: Gen 1 SDK Core
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          cache-node-modules: true
+          cache-install-state: true
+
+      - name: Build Core
+        run: yarn nx build @builder.io/sdk
+
+  gen1-react-sdk:
+    name: Gen 1 React SDK
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        e2e-server: ['gen1-react', 'gen1-next', 'gen1-remix']
+
+    steps:
+      - name: Setup
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          cache-node-modules: true
+          cache-install-state: true
+
+      - name: Run E2E tests
+        run: yarn nx test @e2e/${{ matrix.e2e-server }}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          cache-node-modules: true
+          cache-install-state: true
+
+      - run: yarn ci:lint
+
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ['webcomponents', 'widgets']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use node version 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v4
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: NPM install
+        run: npm ci --legacy-peer-deps
+        working-directory: packages/${{ matrix.package }}
+
+      - name: Build
+        run: npm run ci:build --if-present
+        working-directory: packages/${{ matrix.package }}
+
+      - name: Test
+        run: npm run ci:test --if-present
+        working-directory: packages/${{ matrix.package }}
