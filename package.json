@@ -30,7 +30,8 @@
     "ci:lint": "prettier --check '**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "prettier --write '**/*.{js,jsx,ts,tsx}'",
     "update-npm-dependency": "zx ./scripts/update-npm-dependency.mjs",
-    "g:changeset": "changeset"
+    "g:changeset": "changeset",
+    "dev": "echo \"Please run dev server for a specific package. For example:\n - yarn workspace @snippet/next-app-dir dev\n - yarn workspace @snippet/next-app-dir-client dev\n - yarn workspace @e2e/next-app-dir dev\n - yarn workspace @e2e/next-app-dir-client dev\n - yarn workspace @e2e/gen1-next dev\""
   },
   "engines": {
     "yarn": ">= 3.0.0"
