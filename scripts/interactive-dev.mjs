@@ -44,10 +44,17 @@ rl.question('Enter your choice (0-9): ', answer => {
       console.log('Exiting interactive development menu.');
       process.exit(0);
     } else {
-      // For a real implementation, you'd use execSync or spawn to run the command
-      // but for this script we'll just show instructions
-      console.log('In your terminal, run the following command:');
-      console.log(`\n$ ${command}\n`);
+      const [cmd, ...args] = command.split(' ');
+      const child = spawn(cmd, args, { stdio: 'inherit', shell: true });
+
+      child.on('close', code => {
+        if (code === 0) {
+          console.log('\nCommand executed successfully.');
+        } else {
+          console.error(`\nCommand failed with exit code ${code}.`);
+        }
+        rl.close();
+      });
     }
   } else {
     console.log('Invalid choice. Please run the script again and select a valid option (0-9).');
