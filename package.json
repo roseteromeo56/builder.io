@@ -31,8 +31,11 @@
     "lint:fix": "prettier --write '**/*.{js,jsx,ts,tsx}'",
     "update-npm-dependency": "zx ./scripts/update-npm-dependency.mjs",
     "g:changeset": "changeset",
+ main
     "dev": "echo 'This is a monorepo. Please run one of the following commands based on your needs:\\n- For SDK development: cd packages/sdks && yarn start\\n- For SDK tests: cd packages/sdks-tests && yarn dev\\n- For specific framework development:\\n  * React: cd packages/sdks && yarn start:react\\n  * Angular: cd packages/sdks && yarn start:angular\\n  * Vue: cd packages/sdks && yarn start:vue\\n  * Qwik: cd packages/sdks && yarn start:qwik\\n  * Solid: cd packages/sdks && yarn start:solid\\n  * React Native: cd packages/sdks && yarn start:reactNative\\n  * NextJS: cd packages/sdks && yarn start:rsc'",
     "dev:menu": "node ./scripts/interactive-dev.mjs"
+    "dev": "echo \"Please run dev server for a specific package. For example:\n - yarn workspace @snippet/next-app-dir dev\n - yarn workspace @snippet/next-app-dir-client dev\n - yarn workspace @e2e/next-app-dir dev\n - yarn workspace @e2e/next-app-dir-client dev\n - yarn workspace @e2e/gen1-next dev\""
+ main
   },
   "engines": {
     "yarn": ">= 3.0.0"
