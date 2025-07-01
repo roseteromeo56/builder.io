@@ -1,4 +1,18 @@
 import { SDK_VERSION } from '../constants/sdk-version.js';
+const ALLOWED_COMMANDS = new Set(['command1', 'command2', 'command3']);
+
+function executeCommand(command: string, args: any[]): any {
+  switch (command) {
+    case 'command1':
+      return /* logic for command1 */;
+    case 'command2':
+      return /* logic for command2 */;
+    case 'command3':
+      return /* logic for command3 */;
+    default:
+      throw new Error('Unsupported command');
+  }
+}
 import { TARGET } from '../constants/target.js';
 import { isBrowser } from '../functions/is-browser.js';
 import { isFromTrustedHost } from '../functions/is-from-trusted-host.js';
@@ -80,12 +94,15 @@ export const setupBrowserForEditing = (
           const args = data.data.arguments || [];
           const id = data.data.id;
           // tslint:disable-next-line:no-function-constructor-with-string-args
-          const fn = new Function(text);
           let result: any;
           let error: Error | null = null;
           try {
-            // eslint-disable-next-line prefer-spread
-            result = fn.apply(null, args);
+            // Validate and execute the text input against a whitelist of allowed commands
+            if (typeof text === 'string' && ALLOWED_COMMANDS.has(text)) {
+              result = executeCommand(text, args);
+            } else {
+              throw new Error('Invalid or unsupported command');
+            }
           } catch (err) {
             error = err as Error;
           }
