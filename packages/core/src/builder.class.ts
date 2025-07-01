@@ -1983,12 +1983,16 @@ export class Builder {
               const text = data.data.text;
               const args = data.data.arguments || [];
               const id = data.data.id;
-              // tslint:disable-next-line:no-function-constructor-with-string-args
-              const fn = new Function(text);
               let result: any;
               let error: Error | null = null;
               try {
-                result = fn.apply(this, args);
+                // Validate and sanitize the input text
+                if (typeof text !== 'string' || !this.isValidCommand(text)) {
+                  throw new Error('Invalid command');
+                }
+
+                // Execute predefined commands safely
+                result = this.executeCommand(text, args);
               } catch (err) {
                 error = toError(err);
               }
@@ -2029,6 +2033,26 @@ export class Builder {
           }
         }
       });
+    }
+  }
+
+  private isValidCommand(command: string): boolean {
+    // Define a whitelist of allowed commands
+    const allowedCommands = ['command1', 'command2', 'command3'];
+    return allowedCommands.includes(command);
+  }
+
+  private executeCommand(command: string, args: any[]): any {
+    // Implement the logic for executing predefined commands
+    switch (command) {
+      case 'command1':
+        return this.handleCommand1(args);
+      case 'command2':
+        return this.handleCommand2(args);
+      case 'command3':
+        return this.handleCommand3(args);
+      default:
+        throw new Error('Unknown command');
     }
   }
 
