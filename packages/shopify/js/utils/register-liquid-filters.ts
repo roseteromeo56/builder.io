@@ -6,7 +6,7 @@ const filters = [
     name: 'money',
     action(value: any) {
       const str = String(value);
-      return ('$' + str.slice(0, -2) + '.' + str.slice(-2)).replace('..', '.');
+      return ('$' + str.slice(0, -2) + '.' + str.slice(-2)).replace(/\.\./g, '.');
     },
   },
   {
