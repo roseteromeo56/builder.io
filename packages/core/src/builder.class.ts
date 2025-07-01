@@ -2036,10 +2036,10 @@ export class Builder {
     }
   }
 
+  private static readonly allowedCommands = ['command1', 'command2', 'command3'];
+
   private isValidCommand(command: string): boolean {
-    // Define a whitelist of allowed commands
-    const allowedCommands = ['command1', 'command2', 'command3'];
-    return allowedCommands.includes(command);
+    return Builder.allowedCommands.includes(command);
   }
 
   private executeCommand(command: string, args: any[]): any {
