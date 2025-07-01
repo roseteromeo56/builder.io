@@ -13,7 +13,7 @@
 <p align="center">
   Integrate with any site or app. Drag and drop with the components already in your codebase.
 </p>
-
+Romeo Rosete
 <p align="center">
   <img alt="React SDK Size" src="https://deno.bundlejs.com/badge?q=@builder.io/sdk-react&treeshake=[*]">
   <a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" /></a>
