@@ -119,8 +119,7 @@ interface Event {
 let eventQueue: Event[] = [];
 
 // TODO: share with app somehow
-import { randomBytes } from 'crypto';
-const sessionId = randomBytes(16).toString('hex');
+const sessionId = Math.random().toString(36).split('.')[1];
 
 export function track(name: string, data = {} as any) {
   if (isDev || noTrack) {
