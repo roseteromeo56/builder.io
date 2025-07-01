@@ -26,7 +26,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
-    "webpack": "^5.64.4"
+    "webpack": "^5.94.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -109,13 +109,13 @@
     "isolated-vm": "^5.0.0"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^1.5.1",
+    "@builder.io/qwik": "^1.7.3",
     "@builder.io/sdks": "workspace:*",
     "@types/node": "latest",
     "nx": "16.10.0",
     "nx-cloud": "16.5.2",
     "typescript": "^5.1.6",
-    "vite": "^4.3.2"
+    "vite": "^4.5.14"
   },
   "peerDependencies": {
     "@builder.io/qwik": ">=1.0.0"
