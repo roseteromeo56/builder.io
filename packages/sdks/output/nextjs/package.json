@@ -90,20 +90,20 @@
     "build:browser": "SDK_ENV=browser vite build --mode lib"
   },
   "peerDependencies": {
-    "next": ">=13.4.20",
+    "next": ">=14.2.30",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@builder.io/sdks": "workspace:*",
     "@vitejs/plugin-react": "^4.0.4",
-    "next": ">=13.4.20",
+    "next": ">=14.2.30",
     "nx": "16.10.0",
     "nx-cloud": "16.5.2",
     "react": "^18.2.0",
     "rimraf": "^3.0.2",
     "typescript": "^5.1.6",
-    "vite": "^4.4.9",
+    "vite": "^4.5.14",
     "vite-plugin-dts": "^3.5.2"
   },
   "dependencies": {
