@@ -144,7 +144,7 @@ export const getSizes = (
     }
 
     if (block.responsiveStyles?.large?.width) {
-      const width = block.responsiveStyles.large.width.replace('%', 'vw');
+      const width = block.responsiveStyles.large.width.replace(/%/g, 'vw');
       generatedSizes.push(width);
     } else if (hasSmallOrMediumSize) {
       generatedSizes.push('100vw');
