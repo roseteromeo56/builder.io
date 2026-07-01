@@ -1,5 +1,6 @@
 const { cd, exec, echo, touch } = require('shelljs');
 const { readFileSync } = require('fs');
+const { execFileSync } = require('child_process');
 const url = require('url');
 
 let repoUrl;
@@ -16,6 +17,9 @@ if (typeof pkg.repository === 'object') {
 let parsedUrl = url.parse(repoUrl);
 let repository = (parsedUrl.host || '') + (parsedUrl.path || '');
 let ghToken = process.env.GH_TOKEN;
+if (!ghToken) {
+  throw new Error('GH_TOKEN environment variable must be set');
+}
 
 echo('Deploying docs!!!');
 cd('docs');
@@ -25,5 +29,8 @@ exec('git add .');
 exec('git config user.name "Steve Sewell"');
 exec('git config user.email "sewell.steve@gmail.com"');
 exec('git commit -m "docs(docs): update gh-pages"');
-exec(`git push --force --quiet "https://${ghToken}@${repository}" master:gh-pages`);
+const remoteWithToken = `https://${ghToken}@${repository}`;
+execFileSync('git', ['push', '--force', '--quiet', remoteWithToken, 'master:gh-pages'], {
+  stdio: 'inherit',
+});
 echo('Docs deployed!!');
