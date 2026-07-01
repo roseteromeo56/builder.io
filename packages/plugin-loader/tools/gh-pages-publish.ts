@@ -1,4 +1,5 @@
 const { cd, exec, echo, touch } = require('shelljs');
+const { execFileSync } = require('child_process');
 const { readFileSync } = require('fs');
 const url = require('url');
 
@@ -25,5 +26,11 @@ exec('git add .');
 exec('git config user.name ""');
 exec('git config user.email ""');
 exec('git commit -m "docs(docs): update gh-pages"');
-exec(`git push --force --quiet "https://${ghToken}@${repository}" master:gh-pages`);
+execFileSync(
+  'git',
+  ['push', '--force', '--quiet', `https://${ghToken}@${repository}`, 'master:gh-pages'],
+  {
+    stdio: 'inherit',
+  }
+);
 echo('Docs deployed!!');
