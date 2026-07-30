@@ -26,7 +26,7 @@
     "create-builder": "dist/index.js"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "21.0.1",
+    "@rollup/plugin-commonjs": "29.0.3",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "13.0.6",
     "@rollup/plugin-typescript": "^8.3.0",
@@ -38,7 +38,7 @@
     "cli-spinner": "^0.2.10",
     "colorette": "2.0.16",
     "https-proxy-agent": "^5.0.0",
-    "np": "7.6.0",
+    "np": "12.0.0",
     "prettier": "^2.5.0",
     "rollup": "2.60.2",
     "sisteransi": "^1.0.5",
@@ -57,6 +57,6 @@
     "drag-and-drop"
   ],
   "dependencies": {
-    "replace-in-file": "^6.3.2"
+    "replace-in-file": "^8.4.0"
   }
 }
